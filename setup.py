@@ -18,26 +18,26 @@ doclink = """
 Documentation
 -------------
 
-The full documentation is at http://slack_cleanup.rtfd.org."""
+The full documentation is at http://slack-admin.rtfd.org."""
 
 setup(
-    name='slack_cleanup',
+    name='slack-admin',
     version='0.1.0',
-    description='Clean-up old attachment files in your Slack account to free up space.',
+    description='Slack Admin CLI',
     long_description=readme + '\n\n' + doclink,
     author='Evgeny Demchenko',
     author_email='little_pea@list.ru',
-    url='https://github.com/littlepea/slack-cleanup',
+    url='https://github.com/littlepea/slack-admin',
     packages=[
-        'slack_cleanup',
+        'slack_admin',
     ],
-    package_dir={'slack_cleanup': 'slack_cleanup'},
+    package_dir={'slack_admin': 'slack_admin'},
     include_package_data=True,
     install_requires=[
     ],
     license='MIT',
     zip_safe=False,
-    keywords='slack_cleanup',
+    keywords='slack-admin',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
@@ -47,4 +47,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
+    entry_points='''
+        [console_scripts]
+        slack-admin=slack_admin.main:cli
+    ''',
 )

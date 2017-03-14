@@ -49,29 +49,37 @@ If you are proposing a feature:
 Ready to contribute? Here's how to set up `slack-cleanup` for
 local development.
 
-1. [Fork](https://github.com/Nekroze/slack-cleanup/fork) the `slack-cleanup` repo on GitHub.
-2. Clone your fork locally::
+1. [Fork](https://github.com/littlepea/slack-cleanup/fork) the `slack-cleanup` repo on GitHub.
+2. Clone your fork locally:
 
-    $ git clone git@github.com:your_name_here/slack-cleanup.git
+```
+$ git clone git@github.com:your_name_here/slack-cleanup.git
+```
 
-3. Create a branch for local development::
+3. Create a branch for local development:
 
-    $ git checkout -b name-of-your-bugfix-or-feature
+```
+$ git checkout -b name-of-your-bugfix-or-feature
+```
 
 Now you can make your changes locally.
 
 4. When you're done making changes, check that your changes pass style and unit
-   tests, including testing other Python versions with tox::
+   tests, including testing other Python versions with tox:
 
-    $ tox
+```
+$ tox
+```
 
 To get tox, just pip install it.
 
-5. Commit your changes and push your branch to GitHub::
+5. Commit your changes and push your branch to GitHub:
 
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
+```
+$ git add .
+$ git commit -m "Your detailed description of your changes."
+$ git push origin name-of-your-bugfix-or-feature
+```
 
 6. Submit a pull request through the GitHub website.
 
