@@ -1,11 +1,11 @@
 import asyncio
 import os
-import time
 
 import aiohttp
 import click
-import humanfriendly
-import parsedatetime
+
+from slack_admin import utils
+from slack_admin import api_helpers
 
 
 @click.group()
@@ -26,19 +26,17 @@ def cleanup(older, bigger, prompt, token):
     """
     Cleans up old file attachments from Slack
     """
-    cal = parsedatetime.Calendar()
-    older_than, parse_status = cal.parseDT(datetimeString=older)
-    older_than_timestamp = int(time.mktime(older_than.timetuple()))
-    if not parse_status:
+    older_than_timestamp = utils.get_timestamp_from_date_string(older)
+    if not older_than_timestamp:
         print('Can\'t parse the date: {}'.format(older))
         return
 
-    try:
-        bigger_than = humanfriendly.parse_size(bigger)
-    except humanfriendly.InvalidSize:
-        print(f'Can\'t parse the file size: {bigger}')
-        return
-    except TypeError:
+    if bigger:
+        bigger_than = utils.get_bytes_size_from_string(bigger)
+        if not bigger_than:
+            print(f'Can\'t parse the file size: {bigger}')
+            return
+    else:
         bigger_than = None
 
     token = token or os.environ.get('SLACK_API_TOKEN')
@@ -71,19 +69,18 @@ def cleanup(older, bigger, prompt, token):
 async def get_files(token, older_than_timestamp, bigger_than=None):
     files = []
     async with aiohttp.ClientSession() as session:
-        async with session.get('https://slack.com/api/files.list',
-                               params={'token': token, 'ts_to': older_than_timestamp}) as resp:
+        async with session.get(api_helpers.build_files_list_url(token, to_timestamp=older_than_timestamp)) as resp:
             first_page = await resp.json()
-            files += first_page['files']
+            files += api_helpers.get_files_from_response(first_page)
 
-        for page in range(2, first_page['paging']['pages'] + 1):
-            async with session.get('https://slack.com/api/files.list',
-                                   params={'token': token, 'ts_to': older_than_timestamp, 'page': page}) as resp:
-                current_page = await resp.json()
-                files += current_page['files']
+        for page in api_helpers.get_page_range_from_response(first_page, start_from=2):
+            async with session.get(api_helpers.build_files_list_url(token,
+                                                                    to_timestamp=older_than_timestamp,
+                                                                    page=page)) as resp:
+                files += api_helpers.get_files_from_response(await resp.json())
 
     if bigger_than:
-        return [file for file in files if file['size'] > bigger_than]
+        return api_helpers.filter_files_by_size(files, bigger_than)
 
     return files
 
@@ -94,8 +91,7 @@ async def delete_files(token, files):
     num_files = len(files)
     async with aiohttp.ClientSession() as session:
         for file in files:
-            async with session.get('https://slack.com/api/files.delete',
-                                   params={'token': token, 'file': file['id']}) as resp:
+            async with session.get(api_helpers.build_file_delete_url(token, file_id=file['id'])) as resp:
                 result = await resp.json()
 
                 if result['ok']:

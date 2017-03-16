@@ -4,3 +4,4 @@ parsedatetime==2.2
 humanfriendly==2.4
 wheel==0.29.0
 pytest==3.0.6
+freezegun==0.3.8

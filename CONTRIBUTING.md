@@ -102,5 +102,5 @@ Before you submit a pull request, check that it meets these guidelines:
 To run a subset of tests:
 
 ```
-$ py.test test/test_slack_cleanup.py
+$ python3 -m pytest test/test_utils.py
 ```

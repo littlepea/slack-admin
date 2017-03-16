@@ -51,4 +51,6 @@ setup(
         [console_scripts]
         slack-admin=slack_admin.main:cli
     ''',
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
 )
