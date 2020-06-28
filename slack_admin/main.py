@@ -87,9 +87,9 @@ async def get_files(token, older_than_timestamp, bigger_than=None):
 
 async def delete_files(token, files):
     space = 0
-    count = 1
-    num_files = len(files)
     async with aiohttp.ClientSession() as session:
+        count = 1
+        num_files = len(files)
         for file in files:
             async with session.get(api_helpers.build_file_delete_url(token, file_id=file['id'])) as resp:
                 result = await resp.json()
