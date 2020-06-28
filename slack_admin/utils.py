@@ -24,8 +24,7 @@ def get_timestamp_from_date_string(date_string):
     """
     parsed_date = parse_date_string(date_string)
     if parsed_date:
-        timestamp = int(time.mktime(parsed_date.timetuple()))
-        return timestamp
+        return int(time.mktime(parsed_date.timetuple()))
 
 
 def get_bytes_size_from_string(size):
@@ -35,8 +34,7 @@ def get_bytes_size_from_string(size):
     :return: Size in bytes
     """
     try:
-        bytes_size = humanfriendly.parse_size(size)
-        return bytes_size
+        return humanfriendly.parse_size(size)
     except humanfriendly.InvalidSize:
         return None
     except TypeError:
