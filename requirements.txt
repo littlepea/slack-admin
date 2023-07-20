@@ -1,5 +1,5 @@
 click==6.7
-aiohttp==3.7.4
+aiohttp==3.8.5
 parsedatetime==2.2
 humanfriendly==2.4
 wheel==0.38.1
